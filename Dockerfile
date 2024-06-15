@@ -72,6 +72,7 @@ RUN lvim --headless +'MasonInstall yamlfmt jq' +qall
 
 # Host files will be here
 RUN mkdir -p /__project
+RUN git config --global --add safe.directory /__project
 WORKDIR /__project
 
 CMD tail -f /dev/null

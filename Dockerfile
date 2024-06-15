@@ -75,4 +75,7 @@ RUN mkdir -p /__project
 RUN git config --global --add safe.directory /__project
 WORKDIR /__project
 
-CMD tail -f /dev/null
+
+ENV TERM=xterm-256color
+
+CMD tail -f /dev/null 

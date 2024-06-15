@@ -19,9 +19,6 @@ RUN mkdir -p /setup_files
 WORKDIR /setup_fies
 
 # Nvim
-#RUN curl -L https://github.com/neovim/neovim/releases/download/v0.10.0/nvim-linux64.tar.gz > nvim-linux64.tar.gz
-#RUN tar xzvf nvim-linux64.tar.gz
-#RUN mv ./nvim-linux64/bin/nvim /bin/nvim
 RUN add-apt-repository ppa:neovim-ppa/unstable -y
 RUN apt update
 RUN apt install neovim -y
@@ -43,8 +40,31 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Lunarvim
 RUN curl -L https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh > install_lvim.sh
 RUN bash install_lvim.sh -y
+ENV PATH="/root/.local/bin:$PATH"
 
-ENV PATH="~/.local/bin:$PATH"
+## First boot
+RUN lvim +'LvimUpdate' +qall
+
+COPY config.lua /root/.config/lvim/config.lua
+
+## Sync all confif packages
+RUN lvim --headless +'Lazy sync' +qall
+
+## Treesitter
+RUN lvim --headless +'TSInstallSync lua query markdown_inline comment regex gitignore dockerfile markdown yaml html json' +qall
+
+## Linters
+### yamllint - YAML files
+### markdownlint - Markdown files
+### jsonlint - JSON files
+### ansible-lint - best practices (https://github.com/ansible/ansible-lint)
+RUN apt install python3.12-venv -y
+RUN lvim --headless +'MasonInstall yamllint markdownlint jsonlint ansible-lint' +qall
+
+## Formatter
+### yamlfmt = YAML files
+### jq - command-line JSON processor
+RUN lvim --headless +'MasonInstall yamlfmt jq' +qall
 
 # Host files will be here
 RUN mkdir -p /Repos

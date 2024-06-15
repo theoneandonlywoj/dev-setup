@@ -25,3 +25,5 @@ lvim.builtin.treesitter.ensure_installed = {
 
 -- Neo Tree
 lvim.builtin.nvimtree.setup.view.relativenumber = true
+lvim.builtin.nvimtree.setup.auto_reload_on_write = true
+lvim.builtin.nvimtree.setup.view.adaptive_size = true

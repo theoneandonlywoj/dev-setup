@@ -11,6 +11,7 @@ lvim.format_on_save = true
 lvim.colorscheme = "retrobox"
 
 -- Keymapping
+lvim.keys.normal_mode["<leader>Q"] = ":qa!"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 

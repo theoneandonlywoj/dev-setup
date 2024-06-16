@@ -1,3 +1,10 @@
+-- Fixing "vim.tbl_add_reverse_lookup is deprecated". (https://github.com/pmizio/typescript-tools.nvim/issues/266)
+vim.tbl_add_reverse_lookup = function(tbl)
+  for k, v in pairs(tbl) do
+    tbl[v] = k
+  end
+end
+
 -- General
 lvim.log.level = "warn"
 lvim.format_on_save = true
@@ -9,9 +16,12 @@ lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
 
 -- Treesitter
 lvim.builtin.treesitter.ensure_installed = {
-    "json",
-    "lua",
-    "css",
-    "elixir",
-    "yaml",
+  "json",
+  "lua",
+  "css",
+  "elixir",
+  "yaml",
 }
+
+-- Neo Tree
+lvim.builtin.nvimtree.setup.view.relativenumber = true

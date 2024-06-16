@@ -16,7 +16,7 @@ RUN apt-get install -y \
   software-properties-common
 
 RUN mkdir -p /setup_files
-WORKDIR /setup_fies
+WORKDIR /setup_files
 
 # Nvim
 RUN add-apt-repository ppa:neovim-ppa/unstable -y
@@ -36,6 +36,9 @@ RUN apt-get install -y \
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 # Add .cargo/bin to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Nerdfonts
+RUN curl -fsSL https://raw.githubusercontent.com/getnf/getnf/main/install.sh | bash -s -- --branch=release-0.1
 
 # Lunarvim
 RUN curl -L https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh > install_lvim.sh

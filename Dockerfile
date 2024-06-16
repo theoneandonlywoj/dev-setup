@@ -30,7 +30,8 @@ RUN apt-get install -y \
   pip \
   nodejs \
   npm \
-  ripgrep
+  ripgrep \
+  cargo
 
 ### Rust is a dependency of Lunarvim
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -70,7 +71,7 @@ RUN lvim --headless +'MasonInstall yamllint markdownlint jsonlint ansible-lint' 
 RUN lvim --headless +'MasonInstall yamlfmt jq' +qall
 
 # Host files will be here
-RUN mkdir -p /Repos
-WORKDIR "/Repos"
+RUN mkdir -p /__project
+WORKDIR /__project
 
 CMD tail -f /dev/null

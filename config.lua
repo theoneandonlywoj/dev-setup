@@ -28,3 +28,9 @@ lvim.builtin.treesitter.ensure_installed = {
 lvim.builtin.nvimtree.setup.view.relativenumber = true
 lvim.builtin.nvimtree.setup.auto_reload_on_write = true
 lvim.builtin.nvimtree.setup.view.adaptive_size = true
+
+-- Open File Explorer on Startup
+local function open_nvim_tree()
+  require("nvim-tree.api").tree.open()
+end
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })

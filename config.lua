@@ -20,7 +20,9 @@ lvim.builtin.treesitter.ensure_installed = {
   "json",
   "lua",
   "css",
-  "elixir",
+  "elixirls",
+  "tailwindcss",
+  "markdown",
   "yaml",
 }
 

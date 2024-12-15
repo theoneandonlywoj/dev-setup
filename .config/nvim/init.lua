@@ -1,6 +1,7 @@
 -- Settings
 vim.g.mapleader = " " -- using space as leader key
 vim.g.maplocalleader = "," -- using comma as local leader
+vim.opt.termguicolors = true
 
 -- Bootstrap Lazy.nvim Plugin Manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -67,7 +68,6 @@ require("lazy").setup({
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			lspconfig.elixirls.setup({
 				cmd = { "/root/.config/elixir_ls/language_server.sh" },
-				-- set default capabilities for cmp lsp completion source
 				capabilities = capabilities,
 			})
 		end,

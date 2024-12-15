@@ -92,7 +92,6 @@ RUN chmod +x /root/.config/elixir_ls/language_server.sh
 RUN mkdir -p /__project
 RUN git config --global --add safe.directory /__project
 WORKDIR /__project
-COPY elixir.ex elixir.ex
 
 ENV TERM=xterm-256color
 

@@ -147,13 +147,13 @@ ADD .config/nvim root/.config/nvim
 RUN nvim --headless "+Lazy! update" +q!
 
 #### Mason Install Replacement for EsLint
-RUN nvim --headless "+MasonInstall eslint_d" +q!
-
-#### Healthcheck
-RUN nvim --headless +LazyHealth +q
+RUN nvim --headless ":MasonInstall eslint_d" +q!
 
 #### Install Treesitter all config parsers
-RUN nvim --headless "+TSInstall" +q!
+RUN nvim --headless ":TSInstall" +q!
+
+#### Install ElixirLS
+RUN nvim --headless ":LspInstall elixirls" +q!
 
 # --------------
 # Project Files

@@ -61,6 +61,14 @@ RUN cd /root/TMP && git clone https://github.com/neovim/neovim
 RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
 RUN rm -rf /root/TMP
 
+## Config
+### LazyVim
+RUN .config/nvim ~/.config/nvim
+
+#### Lazy Install
+RUN nvim --headless "+Lazy! update" +q!
+#### Mason Install Replacement for EsLint
+RUN nvim --headless "+MasonInstall eslint_d" +q!
 
 # RUN apt-get -y install curl \
 #     tree \

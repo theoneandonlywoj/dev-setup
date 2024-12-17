@@ -9,7 +9,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Updating the package list
 RUN apt update
 
+# -------
 # Locale
+# -------
 RUN apt-get install -y \
   locales \
   locales-all
@@ -24,12 +26,12 @@ EXPOSE 4000 8080 8081 8082 8083 8084 8085
 
 RUN apt-get update
 
-# General useful tools
+# ----------------
+# General Tooling
+# ----------------
 RUN apt-get install -y \
   # Git
   git \
-  # Lazygit
-  # lazygit \ 
   # cURL
   curl \ 
   # Timezone data
@@ -45,7 +47,9 @@ RUN apt-get install -y \
   # Tree - folder visualisation
   tree
 
+# -------
 # Neovim
+# -------
 ## Dependencies
 RUN apt-get -y install \
   ninja-build \
@@ -63,80 +67,89 @@ RUN rm -rf /root/TMP
 
 ## Config
 ### LazyVim
-RUN .config/nvim ~/.config/nvim
+ADD .config/nvim root/.config/nvim
 
 #### Lazy Install
 RUN nvim --headless "+Lazy! update" +q!
+
 #### Mason Install Replacement for EsLint
 RUN nvim --headless "+MasonInstall eslint_d" +q!
 
-# RUN apt-get -y install curl \
-#     tree \
-#     git \
-#     xclip \
-#     tzdata \
-#     ninja-build \
-#     gettext \
-#     libtool \
-#     libtool-bin \
-#     autoconf \
-#     automake \
-#     cmake \
-#     g++ \
-#     pkg-config \
-#     zip \
-#     unzip \
-#     ripgrep
+#### Healthcheck
+RUN nvim --headless +LazyHealth +q
 
-# # ASDF
-# RUN git config --global advice.detachedHead false; \
-#   git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
-#   /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
-#   /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
+# -----
+# ASDF
+# -----
+RUN git config --global advice.detachedHead false; \
+  git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
+  /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
+  /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
 
-# ## Add asdf to PATH, so it can be run in this Dockerfile
-# ENV PATH="$PATH:/root/.asdf/bin"
+## Add asdf to PATH, so it can be run in this Dockerfile
+ENV PATH="$PATH:/root/.asdf/bin"
 
-# ## Add asdf shims to PATH, so installed executables can be run in this Dockerfile
-# ENV PATH=$PATH:/root/.asdf/shims
+## Add asdf shims to PATH, so installed executables can be run in this Dockerfile
+ENV PATH=$PATH:/root/.asdf/shims
 
-# ## Deps
-# RUN apt install -y \
-#   automake \
-#   autoconf \
-#   libreadline-dev \
-#   libncurses-dev \
-#   libssl-dev \
-#   libyaml-dev \
-#   libxslt-dev \
-#   libffi-dev \
-#   libtool \
-#   unixodbc-dev \
-#   unzip 
+# -------
+# Erlang
+# -------
+## Dependencies (source: https://github.com/asdf-vm/asdf-erlang?tab=readme-ov-file#ubuntu-2404-lts)
+RUN apt-get -y install \
+  build-essential \
+  autoconf \
+  m4 \
+  libncurses5-dev \
+  libwxgtk3.2-dev \
+  libwxgtk-webview3.2-dev \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  libpng-dev \
+  libssh-dev \
+  unixodbc-dev \
+  xsltproc \
+  fop \
+  libxml2-utils \
+  libncurses-dev \
+  openjdk-11-jdk
 
-# # Elixir and Erlang
-# ENV KERL_CONFIGURE_OPTIONS="--disable-debug --without-javac"
-# RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
-# RUN asdf plugin-add elixir
-# RUN asdf install erlang 27.1.1
-# RUN asdf global erlang 27.1.1
-# RUN asdf install elixir 1.17.3-otp-27
-# RUN asdf global elixir 1.17.3-otp-27
-# RUN mix local.hex --force
-# RUN mix local.rebar --force
-# RUN mix archive.install hex phx_new --force
+## Install
+RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
+RUN asdf install erlang 27.1.1
+RUN asdf global erlang 27.1.1
 
-# # Config
-# RUN apt install -y fzf
-# RUN git clone https://github.com/srcrip/neovim-for-elixir ./config/nvim
-# RUN chmod +x /root/.config/elixir_ls/language_server.sh
+## Version
+RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
 
-# git clone https://github.com/LazyVim/starter ~/.config/nvim
+# -------
+# Elixir
+# -------
+## Add Elixir plugin
+RUN asdf plugin-add elixir
 
-# Host files will be here
-# RUN mkdir -p /__project
-# RUN git config --global --add safe.directory /__project
-# WORKDIR /__project
+## Install
+RUN asdf install elixir 1.17.3-otp-27
+RUN asdf global elixir 1.17.3-otp-27
+
+## Version
+RUN elixir --version
+
+## Hex
+RUN mix local.hex --force
+
+## Rebar
+RUN mix local.rebar --force
+
+## Phoenix CLI
+RUN mix archive.install hex phx_new --force
+
+# --------------
+# Project Files
+# --------------
+RUN mkdir -p /__project
+RUN git config --global --add safe.directory /__project
+WORKDIR /__project
 
 ENV TERM=xterm-256color
 

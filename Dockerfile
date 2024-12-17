@@ -47,6 +47,10 @@ RUN apt-get install -y \
   # Tree - folder visualisation
   tree
 
+# Git buffer config
+RUN git config --global http.postBuffer 1048576000
+RUN git config --global https.postBuffer 1048576000
+
 # -------
 # Neovim
 # -------
@@ -77,6 +81,9 @@ RUN nvim --headless "+MasonInstall eslint_d" +q!
 
 #### Healthcheck
 RUN nvim --headless +LazyHealth +q
+
+#### Install Treesitter all config parsers
+RUN nvim --headless "+TSInstall" +q!
 
 # -----
 # ASDF
@@ -129,8 +136,8 @@ RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "r
 RUN asdf plugin-add elixir
 
 ## Install
-RUN asdf install elixir 1.17.3-otp-27
-RUN asdf global elixir 1.17.3-otp-27
+RUN asdf install elixir 1.18.0-rc.0-otp-27
+RUN asdf global elixir 1.18.0-rc.0-otp-27
 
 ## Version
 RUN elixir --version
@@ -143,6 +150,10 @@ RUN mix local.rebar --force
 
 ## Phoenix CLI
 RUN mix archive.install hex phx_new --force
+
+## ElixirLS
+COPY .config/elixirls /root/.config
+RUN chmod +x /root/.config/elixir_ls/language_server.sh
 
 # --------------
 # Project Files

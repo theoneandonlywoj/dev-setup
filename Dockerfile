@@ -51,44 +51,10 @@ RUN apt-get install -y \
 RUN git config --global http.postBuffer 1048576000
 RUN git config --global https.postBuffer 1048576000
 
-# -------
-# Neovim
-# -------
-## Dependencies
-RUN apt-get -y install \
-  ninja-build \
-  gettext \
-  cmake \
-  unzip \
-  curl \
-  build-essential
-
-## Install from source
-RUN mkdir -p /root/TMP
-RUN cd /root/TMP && git clone https://github.com/neovim/neovim
-RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
-RUN rm -rf /root/TMP
-
-## Config
-### LazyVim
-ADD .config/nvim root/.config/nvim
-
-#### Lazy Install
-RUN nvim --headless "+Lazy! update" +q!
-
-#### Mason Install Replacement for EsLint
-RUN nvim --headless "+MasonInstall eslint_d" +q!
-
-#### Healthcheck
-RUN nvim --headless +LazyHealth +q
-
-#### Install Treesitter all config parsers
-RUN nvim --headless "+TSInstall" +q!
-
 # -----
 # ASDF
 # -----
-RUN git config --global advice.detachedHead false; \
+  RUN git config --global advice.detachedHead false; \
   git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
   /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
   /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
@@ -154,6 +120,40 @@ RUN mix archive.install hex phx_new --force
 ## ElixirLS
 COPY .config/elixirls /root/.config
 RUN chmod +x /root/.config/elixir_ls/language_server.sh
+
+# -------
+# Neovim
+# -------
+## Dependencies
+RUN apt-get -y install \
+  ninja-build \
+  gettext \
+  cmake \
+  unzip \
+  curl \
+  build-essential
+
+## Install from source
+RUN mkdir -p /root/TMP
+RUN cd /root/TMP && git clone https://github.com/neovim/neovim
+RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
+RUN rm -rf /root/TMP
+
+## Config
+### LazyVim
+ADD .config/nvim root/.config/nvim
+
+#### Lazy Install
+RUN nvim --headless "+Lazy! update" +q!
+
+#### Mason Install Replacement for EsLint
+RUN nvim --headless "+MasonInstall eslint_d" +q!
+
+#### Healthcheck
+RUN nvim --headless +LazyHealth +q
+
+#### Install Treesitter all config parsers
+RUN nvim --headless "+TSInstall" +q!
 
 # --------------
 # Project Files

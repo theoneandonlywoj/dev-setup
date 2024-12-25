@@ -146,8 +146,8 @@ RUN rm -rf /root/TMP
 ### LazyVim
 ADD .config/nvim root/.config/nvim
 
-#### Lazy Install
-RUN nvim --headless "+Lazy! update" +q!
+#### Mason Install
+RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 
 # --------------
 # Project Files
@@ -158,4 +158,4 @@ WORKDIR /__project
 
 ENV TERM=xterm-256color
 
-CMD ["tail", "-f", "/dev/null"] 
+CMD ["tail", "-f", "/dev/null"]

@@ -45,7 +45,9 @@ RUN apt-get install -y \
   # Ripgrep
   ripgrep \
   # Tree - folder visualisation
-  tree
+  tree \
+  # Git LFS
+  git-lfs
 
 ## LazyGit
 # RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') \

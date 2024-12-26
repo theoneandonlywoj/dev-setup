@@ -1,7 +1,7 @@
 FROM ubuntu:24.10
 
 LABEL maintainer="theoneandonlywoj@gmail.com"
-LABEL version="0.3"
+LABEL version="1.0.0-rc.0"
 
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
@@ -127,6 +127,16 @@ RUN mix local.rebar --force
 RUN mix archive.install hex phx_new --force
 
 # -------
+# NodeJS
+# -------
+## Add NodeJS plugin
+RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+
+## Install
+RUN asdf install nodejs latest
+RUN asdf global nodejs latest
+
+# -------
 # Neovim
 # -------
 ## Dependencies
@@ -145,10 +155,10 @@ RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
 RUN rm -rf /root/TMP
 
 ## Config
-### LazyVim
+### Copy
 ADD .config/nvim root/.config/nvim
 
-#### Mason Install
+### Mason Install
 RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 
 # --------------

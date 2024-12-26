@@ -54,6 +54,8 @@ RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygi
   && install lazygit /usr/local/bin \
   && rm lazygit.tar.gz
 
+COPY .config/lazygit/config.yml root/.config/lazygit/config.yml
+
 # Git buffer config
 RUN git config --global http.postBuffer 1048576000
 RUN git config --global https.postBuffer 1048576000

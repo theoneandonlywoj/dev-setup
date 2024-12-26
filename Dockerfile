@@ -1,7 +1,7 @@
 FROM ubuntu:24.10
 
 LABEL maintainer="theoneandonlywoj@gmail.com"
-LABEL version="0.3"
+LABEL version="1.0.0-rc.0"
 
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive

@@ -22,7 +22,7 @@ ENV LANGUAGE=en_US.UTF-8
 ENV TZ=Europe/Warsaw
 
 # Expose some ports to host by default.
-EXPOSE 4000 8080 8081 8082 8083 8084 8085
+# EXPOSE 4000 8080 8081 8082 8083 8084 8085
 
 RUN apt-get update
 
@@ -45,86 +45,88 @@ RUN apt-get install -y \
   # Ripgrep
   ripgrep \
   # Tree - folder visualisation
-  tree
+  tree \
+  # Git LFS
+  git-lfs
 
 ## LazyGit
-RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') \
-  && curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
-  && tar xf lazygit.tar.gz lazygit \
-  && install lazygit /usr/local/bin \
-  && rm lazygit.tar.gz
+# RUN LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') \
+#   && curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" \
+#   && tar xf lazygit.tar.gz lazygit \
+#   && install lazygit /usr/local/bin \
+#   && rm lazygit.tar.gz
 
-COPY .config/lazygit/config.yml root/.config/lazygit/config.yml
+# COPY .config/lazygit/config.yml root/.config/lazygit/config.yml
 
-# Git buffer config
-RUN git config --global http.postBuffer 1048576000
-RUN git config --global https.postBuffer 1048576000
+# # Git buffer config
+# RUN git config --global http.postBuffer 1048576000
+# RUN git config --global https.postBuffer 1048576000
 
-# -----
-# ASDF
-# -----
-  RUN git config --global advice.detachedHead false; \
-  git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
-  /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
-  /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
+# # -----
+# # ASDF
+# # -----
+#   RUN git config --global advice.detachedHead false; \
+#   git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
+#   /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
+#   /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
 
-## Add asdf to PATH, so it can be run in this Dockerfile
-ENV PATH="$PATH:/root/.asdf/bin"
+# ## Add asdf to PATH, so it can be run in this Dockerfile
+# ENV PATH="$PATH:/root/.asdf/bin"
 
-## Add asdf shims to PATH, so installed executables can be run in this Dockerfile
-ENV PATH=$PATH:/root/.asdf/shims
+# ## Add asdf shims to PATH, so installed executables can be run in this Dockerfile
+# ENV PATH=$PATH:/root/.asdf/shims
 
-# -------
-# Erlang
-# -------
-## Dependencies (source: https://github.com/asdf-vm/asdf-erlang?tab=readme-ov-file#ubuntu-2404-lts)
-RUN apt-get -y install \
-  build-essential \
-  autoconf \
-  m4 \
-  libncurses5-dev \
-  libwxgtk3.2-dev \
-  libwxgtk-webview3.2-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev \
-  libpng-dev \
-  libssh-dev \
-  unixodbc-dev \
-  xsltproc \
-  fop \
-  libxml2-utils \
-  libncurses-dev \
-  openjdk-11-jdk
+# # -------
+# # Erlang
+# # -------
+# ## Dependencies (source: https://github.com/asdf-vm/asdf-erlang?tab=readme-ov-file#ubuntu-2404-lts)
+# RUN apt-get -y install \
+#   build-essential \
+#   autoconf \
+#   m4 \
+#   libncurses5-dev \
+#   libwxgtk3.2-dev \
+#   libwxgtk-webview3.2-dev \
+#   libgl1-mesa-dev \
+#   libglu1-mesa-dev \
+#   libpng-dev \
+#   libssh-dev \
+#   unixodbc-dev \
+#   xsltproc \
+#   fop \
+#   libxml2-utils \
+#   libncurses-dev \
+#   openjdk-11-jdk
 
-## Install
-RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
-RUN asdf install erlang 27.1.1
-RUN asdf global erlang 27.1.1
+# ## Install
+# RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
+# RUN asdf install erlang 27.1.1
+# RUN asdf global erlang 27.1.1
 
-## Version
-RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
+# ## Version
+# RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
 
-# -------
-# Elixir
-# -------
-## Add Elixir plugin
-RUN asdf plugin-add elixir
+# # -------
+# # Elixir
+# # -------
+# ## Add Elixir plugin
+# RUN asdf plugin-add elixir
 
-## Install
-RUN asdf install elixir 1.18.0-rc.0-otp-27
-RUN asdf global elixir 1.18.0-rc.0-otp-27
+# ## Install
+# RUN asdf install elixir 1.18.0-rc.0-otp-27
+# RUN asdf global elixir 1.18.0-rc.0-otp-27
 
-## Version
-RUN elixir --version
+# ## Version
+# RUN elixir --version
 
-## Hex
-RUN mix local.hex --force
+# ## Hex
+# RUN mix local.hex --force
 
-## Rebar
-RUN mix local.rebar --force
+# ## Rebar
+# RUN mix local.rebar --force
 
-## Phoenix CLI
-RUN mix archive.install hex phx_new --force
+# ## Phoenix CLI
+# RUN mix archive.install hex phx_new --force
 
 # -------
 # Neovim
@@ -145,11 +147,10 @@ RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
 RUN rm -rf /root/TMP
 
 ## Config
-### LazyVim
 ADD .config/nvim root/.config/nvim
 
-#### Mason Install
-RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
+#### Sync
+RUN nvim --headless "+Lazy! sync" +qa
 
 # --------------
 # Project Files

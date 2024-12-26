@@ -161,6 +161,11 @@ ADD .config/nvim root/.config/nvim
 ### Mason Install
 RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 
+# ----------------------
+# Obsidian Second Brain
+# ----------------------
+RUN mkdir -p root/Second-Brain
+
 # --------------
 # Project Files
 # --------------

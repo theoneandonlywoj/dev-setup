@@ -164,7 +164,12 @@ RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 # ----------------------
 # Obsidian Second Brain
 # ----------------------
+## Create dir
 RUN mkdir -p root/Second-Brain
+
+# Add alias for brain
+RUN echo '#!/bin/bash\n nvim $HOME/Second-Brain/README.md "$@"' > /usr/bin/brain && \
+    chmod +x /usr/bin/brain
 
 # --------------
 # Project Files

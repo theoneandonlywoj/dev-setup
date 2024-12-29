@@ -111,8 +111,8 @@ RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "r
 RUN asdf plugin-add elixir
 
 ## Install
-RUN asdf install elixir 1.18.0-rc.0-otp-27
-RUN asdf global elixir 1.18.0-rc.0-otp-27
+RUN asdf install elixir 1.18.0-otp-27
+RUN asdf global elixir 1.18.0-otp-27
 
 ## Version
 RUN elixir --version

@@ -1,7 +1,7 @@
 return {
     "epwalsh/obsidian.nvim",
     version = "*", -- recommended, use latest release instead of latest commit
-    lazy = true,
+    lazy = false,
     ft = "markdown",
     dependencies = {
         -- Required.
@@ -9,6 +9,7 @@ return {
     },
     keys = {
         {"<leader>on", "<cmd>ObsidianNew<cr>", desc = "New Obsidian note", mode = "n"},
+        {"<leader>oft", "<cmd>ObsidianNewFromTemplate<cr>", desc = "New Obsidian note from template", mode = "n"},
         {"<leader>oo", "<cmd>ObsidianSearch<cr>", desc = "Search Obsidian notes", mode = "n"},
         {"<leader>os", "<cmd>ObsidianQuickSwitch<cr>", desc = "Quick Switch", mode = "n"},
         {"<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "Show location list of backlinks", mode = "n"},
@@ -23,7 +24,7 @@ return {
             }
         },
         -- Optional, if you keep notes in a specific subdirectory of your vault.
-        notes_subdir = "notes",
+        notes_subdir = "1.Notes",
         -- Optional, customize how note file names are generated given the ID, target directory, and title.
         ---@param spec { id: string, dir: obsidian.Path, title: string|? }
         ---@return string|obsidian.Path The full path to the new note.
@@ -37,7 +38,7 @@ return {
         log_level = vim.log.levels.INFO,
         daily_notes = {
             -- Optional, if you keep daily notes in a separate directory.
-            folder = "notes/daily",
+            folder = "3.DailyNotes",
             -- Optional, if you want to change the date format for the ID of daily notes.
             date_format = "%Y-%m-%d",
             -- Optional, if you want to change the date format of the default alias of daily notes.
@@ -49,11 +50,13 @@ return {
         },
         -- Optional, for templates (see below).
         templates = {
-            folder = "templates",
+            folder = "2.Templates",
             date_format = "%Y-%m-%d",
             time_format = "%H:%M",
             -- A map for custom variables, the key should be the variable and the value a function
             substitutions = {}
-        }
+        },
+        -- https://github.com/nvim-tree/nvim-tree.lua/issues/925#issuecomment-1475085321
+        update_focused_file = { enable = true, update_cwd = true, --[[ ignore_list = { "/node_modules" }, ]] },
     }
 }

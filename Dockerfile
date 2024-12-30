@@ -1,7 +1,7 @@
 FROM ubuntu:24.10
 
 LABEL maintainer="theoneandonlywoj@gmail.com"
-LABEL version="1.0.0-rc.0"
+LABEL version="1.0.0-rc.1"
 
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
@@ -111,8 +111,8 @@ RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "r
 RUN asdf plugin-add elixir
 
 ## Install
-RUN asdf install elixir 1.18.0-rc.0-otp-27
-RUN asdf global elixir 1.18.0-rc.0-otp-27
+RUN asdf install elixir 1.18.0-otp-27
+RUN asdf global elixir 1.18.0-otp-27
 
 ## Version
 RUN elixir --version
@@ -164,7 +164,12 @@ RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 # ----------------------
 # Obsidian Second Brain
 # ----------------------
+## Create dir
 RUN mkdir -p root/Second-Brain
+
+# Add alias for brain
+RUN echo '#!/bin/bash\n nvim $HOME/Second-Brain "$@"' > /usr/bin/brain && \
+    chmod +x /usr/bin/brain
 
 # --------------
 # Project Files

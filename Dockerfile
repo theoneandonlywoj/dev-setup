@@ -168,7 +168,7 @@ RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 RUN mkdir -p root/Second-Brain
 
 # Add alias for brain
-RUN echo '#!/bin/bash\n nvim $HOME/Second-Brain/README.md "$@"' > /usr/bin/brain && \
+RUN echo '#!/bin/bash\n nvim $HOME/Second-Brain "$@"' > /usr/bin/brain && \
     chmod +x /usr/bin/brain
 
 # --------------

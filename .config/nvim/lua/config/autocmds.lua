@@ -15,7 +15,8 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 -- Autorun Screenkey
 vim.api.nvim_create_autocmd("VimEnter", {
-	callback = function()
-		vim.cmd("Screenkey")
-	end,
+  callback = function()
+    vim.cmd("Screenkey")
+  end,
 })
+

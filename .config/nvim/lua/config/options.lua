@@ -47,9 +47,12 @@ vim.opt.complete = ""
 
 -- Confirm to save changes before exiting modified buffer
 vim.opt.confirm = true
---
+
 -- Use spaces instead of tabs
 vim.opt.expandtab = true
+
+-- Wrap the line
+vim.opt.wrap = true
 
 -- Enable mouse mode
 vim.opt.mouse = "a"

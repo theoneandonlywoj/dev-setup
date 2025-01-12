@@ -161,6 +161,9 @@ ADD .config/nvim root/.config/nvim
 ### Mason Install
 RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
 
+## Lazy Update Plugins
+RUN nvim --headless "+Lazy! sync" +q
+
 # ----------------------
 # Obsidian Second Brain
 # ----------------------

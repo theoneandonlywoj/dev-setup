@@ -77,3 +77,12 @@ vim.opt.tabstop = 2
 
 -- True color support
 vim.opt.termguicolors = true
+
+-- Scroll offset
+vim.opt.scrolloff = 20
+
+-- Do not use swapfiles
+vim.opt.swapfile = false
+
+-- Clipboard
+vim.opt.clipboard = "unnamedplus"

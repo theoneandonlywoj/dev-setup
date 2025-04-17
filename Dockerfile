@@ -1,7 +1,7 @@
 FROM ubuntu:24.10
 
 LABEL maintainer="theoneandonlywoj@gmail.com"
-LABEL version="1.0.0-rc.1"
+LABEL version="1.0.0-rc.2"
 
 # Disable Prompt During Packages Installation
 ARG DEBIAN_FRONTEND=noninteractive
@@ -60,127 +60,9 @@ COPY .config/lazygit/config.yml root/.config/lazygit/config.yml
 RUN git config --global http.postBuffer 1048576000
 RUN git config --global https.postBuffer 1048576000
 
-# -----
-# ASDF
-# -----
-  RUN git config --global advice.detachedHead false; \
-  git clone https://github.com/asdf-vm/asdf.git $HOME/.asdf --branch v0.10.2; \
-  /bin/bash -c 'echo -e "\n\n## Configure ASDF \n. $HOME/.asdf/asdf.sh" >> ~/.bashrc'; \
-  /bin/bash -c 'echo -e "\n\n## ASDF Bash Completion: \n. $HOME/.asdf/completions/asdf.bash" >> ~/.bashrc';
+RUN curl https://mise.run | sh
 
-## Add asdf to PATH, so it can be run in this Dockerfile
-ENV PATH="$PATH:/root/.asdf/bin"
-
-## Add asdf shims to PATH, so installed executables can be run in this Dockerfile
-ENV PATH=$PATH:/root/.asdf/shims
-
-# -------
-# Erlang
-# -------
-## Dependencies (source: https://github.com/asdf-vm/asdf-erlang?tab=readme-ov-file#ubuntu-2404-lts)
-RUN apt-get -y install \
-  build-essential \
-  autoconf \
-  m4 \
-  libncurses5-dev \
-  libwxgtk3.2-dev \
-  libwxgtk-webview3.2-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev \
-  libpng-dev \
-  libssh-dev \
-  unixodbc-dev \
-  xsltproc \
-  fop \
-  libxml2-utils \
-  libncurses-dev \
-  openjdk-11-jdk
-
-## Install
-RUN asdf plugin add erlang https://github.com/asdf-vm/asdf-erlang.git
-RUN asdf install erlang 27.1.1
-RUN asdf global erlang 27.1.1
-
-## Version
-RUN erl -eval '{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), io:fwrite(Version), halt().' -noshell
-
-# -------
-# Elixir
-# -------
-## Add Elixir plugin
-RUN asdf plugin-add elixir
-
-## Install
-RUN asdf install elixir 1.18.0-otp-27
-RUN asdf global elixir 1.18.0-otp-27
-
-## Version
-RUN elixir --version
-
-## Hex
-RUN mix local.hex --force
-
-## Rebar
-RUN mix local.rebar --force
-
-## Phoenix CLI
-RUN mix archive.install hex phx_new --force
-
-# -------
-# NodeJS
-# -------
-## Add NodeJS plugin
-RUN asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-
-## Install
-RUN asdf install nodejs latest
-RUN asdf global nodejs latest
-
-# -------
-# Neovim
-# -------
-## Dependencies
-RUN apt-get -y install \
-  ninja-build \
-  gettext \
-  cmake \
-  unzip \
-  curl \
-  build-essential
-
-## Install from source
-RUN mkdir -p /root/TMP
-RUN cd /root/TMP && git clone https://github.com/neovim/neovim
-RUN cd /root/TMP/neovim && git checkout stable && make -j4 && make install
-RUN rm -rf /root/TMP
-
-## Config
-### Copy
-ADD .config/nvim root/.config/nvim
-
-### Mason Install
-RUN nvim --headless +"MasonInstall lua-language-server stylua" +q
-
-## Lazy Update Plugins
-RUN nvim --headless "+Lazy! sync" +q
-
-# ----------------------
-# Obsidian Second Brain
-# ----------------------
-## Create dir
-RUN mkdir -p root/Second-Brain
-
-# Add alias for brain
-RUN echo '#!/bin/bash\n nvim $HOME/Second-Brain "$@"' > /usr/bin/brain && \
-    chmod +x /usr/bin/brain
-
-# --------------
-# Project Files
-# --------------
-RUN mkdir -p /__project
-RUN git config --global --add safe.directory /__project
-WORKDIR /__project
-
-ENV TERM=xterm-256color
+RUN echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+RUN echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 
 CMD ["tail", "-f", "/dev/null"]

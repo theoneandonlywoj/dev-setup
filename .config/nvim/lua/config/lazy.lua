@@ -20,7 +20,7 @@ require("lazy").setup({
     -- Elixir tools
     { import = "lazyvim.plugins.extras.lang.elixir" },
     { import = "lazyvim.plugins.extras.lang.tailwind" },
-    { import = "lazyvim.plugins.extras.lang.json" },
+    -- { import = "lazyvim.plugins.extras.lang.json" },
     { import = "plugins" },
   },
   defaults = {
@@ -47,6 +47,14 @@ require("lazy").setup({
         "tutor",
         "zipPlugin",
       },
+    },
+  },
+  git = {
+    throttle = {
+      enabled = true, -- not enabled by default
+      -- max 2 ops every 5 seconds
+      rate = 1,
+      duration = 1500 * 1000, -- in ms
     },
   },
 })

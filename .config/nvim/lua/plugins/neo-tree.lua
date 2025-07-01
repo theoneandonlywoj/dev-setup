@@ -1,6 +1,6 @@
 -- Show hidden files (source: https://github.com/nvim-neo-tree/neo-tree.nvim/discussions/353#discussioncomment-8094119)
 return {
-    "neo-tree.nvim",
+    "nvim-neo-tree/neo-tree.nvim",
     opts = {
       filesystem = {
         filtered_items = {
